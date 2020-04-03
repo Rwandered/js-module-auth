@@ -3,10 +3,10 @@ let allGroups = [];
 let allRights = [];
 let authenticatedUser;
 
-const remove = (array, item) => array.filter(function(elem) { return item != elem });
+const remove = (array, item) => array.filter(elem => item != elem);
 
 const mustContain = (array, item) => {
-    if (array.indexOf(item) == -1)
+    if (array.include(item))
         throw new Error();
 }
 
@@ -32,17 +32,13 @@ const deleteGroup = group => {
     mustContain(allGroups, group);
     allGroups = remove(allGroups, group);
 
-    allUsers.forEach(user => {
-        user.groups = remove(user.groups, group);
-    });
+    allUsers.forEach(user => user.groups = remove(user.groups, group));
 }
 
 const deleteRight = right => {
     mustContain(allRights, right);
     allRights = remove(allRights, right);
-    allGroups.forEach(group => {
-        group.rights = remove(group.rights, right);
-    });
+    allGroups.forEach(group => group.rights = remove(group.rights, right));
 }
 
 const addRightToGroup = (right, group) => {
@@ -102,12 +98,11 @@ const logout = () => authenticatedUser = undefined;
 
 const currentUser = () => authenticatedUser;
 
-
 const isAuthorized = (user, right) => {
     mustContain(allRights, right);
     mustContain(allUsers, user);
 
-    return user.groups.reduce(function(result, group) {
+    return user.groups.reduce((result, group) => {
         return result.concat(group.rights);
-    }, []).indexOf(right) != -1;
+    }, []).indexOf(right) !== -1;
 }
