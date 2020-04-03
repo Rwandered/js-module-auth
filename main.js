@@ -82,7 +82,7 @@ const login = (username, password) => {
         return false;
     }
 
-    let user = allUsers.find(function(user) {
+    let user = allUsers.find(user => {
         return user.username === username && user.password === password;
     });
 
